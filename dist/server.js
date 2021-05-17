@@ -66,6 +66,10 @@
 
 	var _template2 = _interopRequireDefault(_template);
 
+	var _isomorphicFetch = __webpack_require__(6);
+
+	var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var app = (0, _express2.default)();
@@ -73,9 +77,14 @@
 	app.use(_express2.default.static('dist/public'));
 
 	app.get('/', function (req, res) {
-	    var body = _server2.default.renderToString(_react2.default.createElement(_app2.default, null));
-	    var html = (0, _template2.default)(body);
-	    res.send(html);
+	    (0, _isomorphicFetch2.default)('https://api.github.com/users/gaearon/gists').then(function (response) {
+	        return response.json();
+	    }).then(function (gists) {
+	        var body = _server2.default.renderToString(_react2.default.createElement(_app2.default, { gists: gists }));
+	        var html = (0, _template2.default)(body, gists);
+
+	        res.send(html);
+	    });
 	});
 
 	app.listen(3000, function () {
@@ -107,7 +116,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 
 	var _react = __webpack_require__(2);
@@ -116,13 +125,22 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var App = function App() {
-	  return _react2.default.createElement(
-	    'div',
-	    null,
-	    'Hello React'
-	  );
+	var App = function App(_ref) {
+	    var gists = _ref.gists;
+	    return _react2.default.createElement(
+	        'ul',
+	        null,
+	        gists.map(function (gist) {
+	            return _react2.default.createElement(
+	                'li',
+	                { key: gist.id },
+	                gist.description
+	            );
+	        })
+	    );
 	};
+
+	App.propTypes = { gists: _react2.default.PropTypes.array };
 
 	exports.default = App;
 
@@ -136,9 +154,15 @@
 	  value: true
 	});
 
-	exports.default = function (body) {
-	  return "\n  <!DOCTYPE html> \n  <html> \n    <head> \n      <meta charset=\"UTF-8\"> \n    </head> \n    <body> \n      <div id=\"app\">" + body + "</div> \n      <script src=\"/bundle.js\"></script> \n    </body> \n  </html> ";
+	exports.default = function (body, gists) {
+	  return " \n  <!DOCTYPE html> \n  <html> \n    <head> \n      <meta charset=\"UTF-8\"> \n    </head> \n    <body> \n      <div id=\"app\">" + body + "</div> \n      <script>window.gists = " + JSON.stringify(gists) + "</script> \n      <script src=\"/bundle.js\"></script> \n    </body> \n  </html>";
 	};
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	module.exports = require("isomorphic-fetch");
 
 /***/ }
 /******/ ]);

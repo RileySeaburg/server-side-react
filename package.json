@@ -4,7 +4,8 @@
   "description": "A basic server side react setup.",
   "scripts": {
     "build": "webpack",
-    "start": "node ./dist/server"
+    "start": "node ./dist/server",
+    "dev": "nodemon --exec 'yarn run build && yarn run start'"
   },
   "main": "index.js",
   "author": "Riley Seaburg",
@@ -20,11 +21,14 @@
     "eslint-plugin-import": "1.7.0",
     "eslint-plugin-jsx-a11y": "1.2.0",
     "eslint-plugin-react": "5.0.1",
+    "nodemon": "^2.0.7",
+    "nodemon-webpack-plugin": "^4.5.2",
     "webpack": "1.13.3",
     "webpack-node-externals": "1.5.4"
   },
   "dependencies": {
     "express": "4.14.0",
+    "isomorphic-fetch": "^3.0.0",
     "react": "15.3.2",
     "react-dom": "15.3.2"
   }

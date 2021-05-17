@@ -60,7 +60,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	_reactDom2.default.render(_react2.default.createElement(_app2.default, null), document.getElementById('app'));
+	_reactDom2.default.render(_react2.default.createElement(_app2.default, { gists: window.gists }), document.getElementById('app'));
 
 /***/ },
 /* 1 */
@@ -21400,7 +21400,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 
 	var _react = __webpack_require__(1);
@@ -21409,13 +21409,22 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var App = function App() {
-	  return _react2.default.createElement(
-	    'div',
-	    null,
-	    'Hello React'
-	  );
+	var App = function App(_ref) {
+	    var gists = _ref.gists;
+	    return _react2.default.createElement(
+	        'ul',
+	        null,
+	        gists.map(function (gist) {
+	            return _react2.default.createElement(
+	                'li',
+	                { key: gist.id },
+	                gist.description
+	            );
+	        })
+	    );
 	};
+
+	App.propTypes = { gists: _react2.default.PropTypes.array };
 
 	exports.default = App;
 
